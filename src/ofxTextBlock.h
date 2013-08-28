@@ -17,9 +17,10 @@
 
  ***********************************************************************/
 
-#ifndef OFXTEXTBLOCK_H
-#define OFXTEXTBLOCK_H
+#ifndef OFXTEXTBLOCK_OFXTGL_H
+#define OFXTEXTBLOCK_OFXTGL_H
 
+#include "ofxFTGLFont.h"
 #include "ofMain.h"
 #include <iterator>
 
@@ -48,19 +49,22 @@ enum TextBlockAlignment { OF_TEXT_ALIGN_LEFT, OF_TEXT_ALIGN_RIGHT, OF_TEXT_ALIGN
 class ofxTextBlock
 {
     public:
-        ofxTextBlock();
-        virtual ~ofxTextBlock();
+        ofxTextBlock() { }
+        virtual ~ofxTextBlock() { }
+
+        //ADded by Ben McChesney
+        float antiAliasFactor ;
 
         string          rawText;
-        ofTrueTypeFont  defaultFont;
+        ofxFTGLFont   defaultFont;
         wordBlock       blankSpaceWord;
         float           scale;
 
         vector<wordBlock>   words;
         vector<lineBlock>   lines;
 
-        void    init(string fontLocation, float fontSize);
-
+        void    init(string fontLocation, float fontSize , float antiAlias = 1.0f );
+		void    init(ofxFTGLFont font );
         void    setText(string _inputText);
 
         int     wrapTextX(float lineWidth);                 //Returns the number of lines it formed.
@@ -76,11 +80,19 @@ class ofxTextBlock
         void    drawCenter(float x, float y);
         void    drawJustified(float x, float y, float boxWidth);
 
+        void drawCrispLeft( float x , float y ) ;
+        void drawCrispCenter ( float x , float y ) ;
 
         void    forceScale(float _scale);
 
         float   getWidth();
         float   getHeight();
+
+		int		getNumLines() ;
+
+		float	alpha ;
+
+        void unload() ;
 
     protected:
 

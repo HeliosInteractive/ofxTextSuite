@@ -19,27 +19,43 @@
 
 #include "ofxTextBlock.h"
 
-ofxTextBlock::ofxTextBlock()
+
+
+
+void ofxTextBlock::unload()
 {
-
-    scale       =   1.0f;
-
+    words.clear() ;
+    lines.clear() ;
 }
 
-ofxTextBlock::~ofxTextBlock()
+
+void ofxTextBlock::init(ofxFTGLFont  font )
 {
-    //dtor
-}
-
-void ofxTextBlock::init(string fontLocation, float fontSize){
-
-    defaultFont.loadFont(fontLocation, fontSize, true, true);
-
-    //Set up the blank space word
-    blankSpaceWord.rawWord = " ";
-    blankSpaceWord.width   = defaultFont.stringWidth ("x");
-    blankSpaceWord.height  = defaultFont.stringHeight("i");
+    defaultFont = font ;
+	 antiAliasFactor = 1.0f ; 
+	blankSpaceWord.rawWord = " ";
+	blankSpaceWord.width   = defaultFont.getStringBoundingBox ((string)"x" , 0 , 0 ).width ;
+    blankSpaceWord.height  = defaultFont.getStringBoundingBox ((string)"i" , 0 , 0 ).height ;
     blankSpaceWord.color.r = blankSpaceWord.color.g = blankSpaceWord.color.b = 255;
+	alpha = 1.0f ;
+    scale = 1.0f ;
+}
+
+void ofxTextBlock::init(string fontLocation, float fontSize , float antiAlias ){
+
+    //loadFont(string filename, int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=false, bool makeContours=false, float simplifyAmt=0.3, int dpi=0);
+    //defaultFont.loadFont( fontLocation, fontSize ,  true ) ; //, true , true ) ;
+    defaultFont.loadFont( fontLocation , fontSize , true , true ) ;
+    //
+    antiAliasFactor = antiAlias ;
+    //Set up the blank space word
+    blankSpaceWord.rawWord = " "; 
+   // defaultFont.getStringBoundingBox()
+    blankSpaceWord.width   = defaultFont.getStringBoundingBox ((string)"x" , 0 , 0 ).width ;
+    blankSpaceWord.height  = defaultFont.getStringBoundingBox ((string)"i" , 0 , 0 ).height ;
+    blankSpaceWord.color.r = blankSpaceWord.color.g = blankSpaceWord.color.b = 255;
+	alpha = 0.0f ;
+    scale = 1.0f ;
 
 }
 
@@ -62,6 +78,11 @@ void ofxTextBlock::drawLeft(float x, float y){
     float   drawX;
     float   drawY;
 
+    float scaleAA = 1.0f / antiAliasFactor ;
+
+
+    ofPushMatrix( ) ;
+
     float currX = 0;
 
     if (words.size() > 0) {
@@ -75,12 +96,12 @@ void ofxTextBlock::drawLeft(float x, float y){
                 drawX = x + currX;
                 drawY = y + (defaultFont.getLineHeight() * (l + 1));
 
-                ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
+               // ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
                 glPushMatrix();
                 //glTranslatef(drawX, drawY, 0.0f);
                 glScalef(scale, scale, scale);
 
-                defaultFont.drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
+                defaultFont.drawString( words[currentWordID].rawWord.c_str(), drawX, drawY);
                 currX += words[currentWordID].width;
 
                 glPopMatrix();
@@ -90,18 +111,21 @@ void ofxTextBlock::drawLeft(float x, float y){
 
         }
     }
+
+    ofPopMatrix( ) ;
 }
 
-void ofxTextBlock::drawCenter(float x, float y){
+void ofxTextBlock::drawCrispCenter( float x , float y )
+{
 
-    string  strToDraw;
+      string  strToDraw;
     int     currentWordID;
     float   drawX;
     float   drawY;
     float   lineWidth;
 
     float currX = 0;
-
+    ofFill( ) ;
     if (words.size() > 0) {
 
         for(int l=0;l < lines.size(); l++)
@@ -122,7 +146,7 @@ void ofxTextBlock::drawCenter(float x, float y){
                 drawX = -(lineWidth / 2) + currX;
                 drawY = defaultFont.getLineHeight() * (l + 1);
 
-                ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
+               //ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
 
                 glPushMatrix();
 
@@ -141,6 +165,98 @@ void ofxTextBlock::drawCenter(float x, float y){
 
         }
     }
+}
+void ofxTextBlock::drawCrispLeft(float x, float y){
+
+    string  strToDraw;
+    int     currentWordID;
+    float   drawX;
+    float   drawY;
+
+    float currX = 0;
+
+    //draw Fill
+    if (words.size() > 0)
+    {
+
+        for(int l=0;l < lines.size(); l++)
+        {
+            for(int w=0;w < lines[l].wordsID.size(); w++)
+            {
+                currentWordID = lines[l].wordsID[w];
+
+                drawX = x + currX;
+                drawY = y + (defaultFont.getLineHeight() * (l + 1));
+
+                glPushMatrix();
+                //glTranslatef(drawX, drawY, 0.0f);
+                glScalef(scale, scale, scale);
+
+                //defaultFont.drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
+                defaultFont.drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
+                currX += words[currentWordID].width;
+
+                glPopMatrix();
+
+            }
+            currX = 0;
+
+        }
+    }
+}
+
+
+void ofxTextBlock::drawCenter(float x, float y){
+
+    string  strToDraw;
+    int     currentWordID;
+    float   drawX;
+    float   drawY;
+    float   lineWidth;
+
+    float currX = 0;
+	ofPushMatrix( ) ;
+		float scaleAA = 1.0f / antiAliasFactor ;
+        ofScale( scaleAA , scaleAA ) ;
+    if (words.size() > 0) {
+
+        for(int l=0;l < lines.size(); l++)
+        {
+
+            //Get the length of the line.
+            lineWidth = 0;
+            for(int w=0;w < lines[l].wordsID.size(); w++)
+            {
+                currentWordID = lines[l].wordsID[w];
+                lineWidth += words[currentWordID].width;
+            }
+
+            for(int w=0;w < lines[l].wordsID.size(); w++)
+            {
+                currentWordID = lines[l].wordsID[w];
+
+                drawX = -(lineWidth / 2) + currX;
+                drawY = defaultFont.getLineHeight() * (l + 1) ;
+
+                glPushMatrix();
+
+                //Move to central point using pre-scaled co-ordinates
+                glTranslatef(x, y, 0.0f);
+
+                glScalef(scale, scale, scale);
+                defaultFont.drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
+				ofEnableSmoothing() ;
+                currX += words[currentWordID].width;
+
+                glPopMatrix();
+
+            }
+            currX = 0;
+
+        }
+    }
+
+	ofPopMatrix() ;
 }
 
 void ofxTextBlock::drawJustified(float x, float y, float boxWidth){
@@ -180,7 +296,7 @@ void ofxTextBlock::drawJustified(float x, float y, float boxWidth){
                 drawX = currX;
                 drawY = defaultFont.getLineHeight() * (l + 1);
 
-                ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
+              //  ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
                 glPushMatrix();
                 //Move to top left point using pre-scaled co-ordinates
                 glTranslatef(x, y, 0.0f);
@@ -226,7 +342,7 @@ void ofxTextBlock::drawRight(float x, float y){
                 drawX = -currX - words[currentWordID].width;
                 drawY = defaultFont.getLineHeight() * (l + 1);
 
-                ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
+             //   ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
 
                 glPushMatrix();
 
@@ -310,7 +426,7 @@ void ofxTextBlock::wrapTextArea(float rWidth, float rHeight){
         bool bScaleAvailable = false;
 
         for (int i=1; i <= maxIterations; i++) {
-            ofLog(OF_LOG_VERBOSE,"Scales %i = %f\n", i, scales[maxIndex]);
+            //ofLog(OF_LOG_VERBOSE,"Scales %i = %f\n", i, scales[maxIndex]);
             if (scales[i] != -1) bScaleAvailable = true;
 
             if (scales[i] > scales[maxIndex]) {
@@ -330,12 +446,11 @@ void ofxTextBlock::wrapTextArea(float rWidth, float rHeight){
         wrapTextForceLines(maxIndex);
         scale = persistScale;
 
-        ofLog(OF_LOG_VERBOSE,"Scaling with %i at scale %f...\n", maxIndex, scale);
+        //ofLog(OF_LOG_VERBOSE,"Scaling with %i at scale %f...\n", maxIndex, scale);
     }
 
 
 }
-
 
 bool ofxTextBlock::wrapTextForceLines(int linesN){
 
@@ -346,7 +461,7 @@ bool ofxTextBlock::wrapTextForceLines(int linesN){
         float lineWidth = _getWidthOfWords() * (1.1f / (float)linesN);
 
         int curLines = 0;
-        bool bGotLines;
+        bool bGotLines = false ;
 
         //keep increasing the line width until we get the desired number of lines.
         while (!bGotLines) {
@@ -432,10 +547,12 @@ void ofxTextBlock::_loadWords(){
         if (i != tokens.size()) words.push_back(blankSpaceWord);
     }
 
+    /*
     for(int i=0;i < words.size(); i++)
     {
         ofLog(OF_LOG_VERBOSE, "Loaded word: %i, %s\n", i, words[i].rawWord.c_str());
     }
+     */
 
 
 }

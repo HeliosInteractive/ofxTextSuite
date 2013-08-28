@@ -17,8 +17,8 @@
 
  ***********************************************************************/
 
-#ifndef OFXTEXTSUITE_H
-#define OFXTEXTSUITE_H
+#ifndef OFXTEXTSUITE_OFXFTGL_H
+#define OFXTEXTSUITE_OFXFTGL_H
 
 #include "ofxTextBlock.h"
 
