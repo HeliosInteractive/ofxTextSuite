@@ -67,6 +67,8 @@ class ofxTextBlock
 		void    init(ofxFTGLFont font );
         void    setText(string _inputText);
 
+		void   setProperties( float _x , float _y , TextBlockAlignment alignment ) ;
+
         int     wrapTextX(float lineWidth);                 //Returns the number of lines it formed.
         void    wrapTextArea(float rWidth, float rHeight);
         bool    wrapTextForceLines(int linesN);
@@ -74,6 +76,7 @@ class ofxTextBlock
         void    setLineHeight(float lineHeight);
         void    setColor(int r, int g, int b, int a);
 
+		void	draw( ) ;								   //Draws using X , Y and saved alignment
         void    draw(float x, float y);                    //Draws left align.
         void    drawLeft(float x, float y);
         void    drawRight(float x, float y);
@@ -93,6 +96,10 @@ class ofxTextBlock
 		float	alpha ;
 
         void unload() ;
+
+		float x , y ; 
+
+		TextBlockAlignment alignment ; 
 
     protected:
 

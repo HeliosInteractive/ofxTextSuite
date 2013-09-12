@@ -50,13 +50,22 @@ void ofxTextBlock::init(string fontLocation, float fontSize , float antiAlias ){
     antiAliasFactor = antiAlias ;
     //Set up the blank space word
     blankSpaceWord.rawWord = " "; 
-   // defaultFont.getStringBoundingBox()
+
+
     blankSpaceWord.width   = defaultFont.getStringBoundingBox ((string)"x" , 0 , 0 ).width ;
     blankSpaceWord.height  = defaultFont.getStringBoundingBox ((string)"i" , 0 , 0 ).height ;
     blankSpaceWord.color.r = blankSpaceWord.color.g = blankSpaceWord.color.b = 255;
 	alpha = 0.0f ;
     scale = 1.0f ;
 
+	alignment = OF_TEXT_ALIGN_RIGHT ; 
+}
+
+void ofxTextBlock::setProperties( float _x , float _y , TextBlockAlignment _alignment ) 
+{
+	x = _x ; 
+	y = _y ; 
+	alignment = _alignment ; 
 }
 
 void ofxTextBlock::setText(string _inputText){
@@ -64,6 +73,42 @@ void ofxTextBlock::setText(string _inputText){
     _loadWords();
     wrapTextForceLines(1);
 }
+
+
+void ofxTextBlock::draw( )
+{
+		/*
+	//Just a helpful set of enumerated constants.
+enum TextBlockAlignment { OF_TEXT_ALIGN_LEFT, OF_TEXT_ALIGN_RIGHT, OF_TEXT_ALIGN_JUSTIFIED, OF_TEXT_ALIGN_CENTER };
+
+*/
+
+	switch ( alignment ) 
+	{
+		case OF_TEXT_ALIGN_RIGHT : 
+			drawRight( x , y ) ; 
+			break ; 
+
+		case OF_TEXT_ALIGN_LEFT :
+			drawLeft( x , y ) ; 
+			break ; 
+
+		case OF_TEXT_ALIGN_JUSTIFIED : 
+			cout << "DRAW JUSTIFIED NOT IMPLEMENTED" << endl ;
+			break ; 
+
+		case OF_TEXT_ALIGN_CENTER : 
+			drawCenter( x , y ) ; 
+		break ; 
+
+		default :
+			ofLogVerbose( "ofxTextBlock::draw() alignment is NOT correct" ) ; 
+			break ;
+	}
+    drawLeft(x, y);
+
+}
+
 
 void ofxTextBlock::draw(float x, float y){
 
