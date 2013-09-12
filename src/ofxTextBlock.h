@@ -91,7 +91,7 @@ class ofxTextBlock
         float   getWidth();
         float   getHeight();
 
-		int		getNumLines() ;
+		int		getNumLines() { return lines.size(); }
 
 		float	alpha ;
 
