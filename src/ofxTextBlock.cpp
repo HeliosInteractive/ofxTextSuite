@@ -105,7 +105,6 @@ enum TextBlockAlignment { OF_TEXT_ALIGN_LEFT, OF_TEXT_ALIGN_RIGHT, OF_TEXT_ALIGN
 			ofLogVerbose( "ofxTextBlock::draw() alignment is NOT correct" ) ; 
 			break ;
 	}
-    drawLeft(x, y);
 
 }
 
