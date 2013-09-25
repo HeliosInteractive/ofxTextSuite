@@ -7,6 +7,12 @@
 		<ClCompile Include="src\main.cpp">
 			<Filter>src</Filter>
 		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\testApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\..\addons\ofxFTGL\src\ofxFTGLFont.cpp">
 			<Filter>addons\ofxFTGL\src</Filter>
 		</ClCompile>
@@ -19,34 +25,37 @@
 			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons">
-			<UniqueIdentifier>{71834f65-f3a9-211e-73b8-dc8563776aec}</UniqueIdentifier>
+			<UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxFTGL">
-			<UniqueIdentifier>{57563682-f5c8-32f7-8507-391bc1f1894f}</UniqueIdentifier>
+			<UniqueIdentifier>{57563682-F5C8-32F7-8507-391B}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxFTGL\src">
-			<UniqueIdentifier>{dab99e66-bff9-d8fc-4903-714c828d436c}</UniqueIdentifier>
+			<UniqueIdentifier>{DAB99E66-BFF9-D8FC-4903-714C}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxFTGL\libs">
-			<UniqueIdentifier>{a27be0c5-eba8-b296-a7fc-2d5d0a2aca0c}</UniqueIdentifier>
+			<UniqueIdentifier>{A27BE0C5-EBA8-B296-A7FC-2D5D}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxFTGL\libs\FTGL">
-			<UniqueIdentifier>{a1802bb1-f112-3ed7-7aa3-2dc0935bd9fb}</UniqueIdentifier>
+			<UniqueIdentifier>{A1802BB1-F112-3ED7-7AA3-2DC0}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxFTGL\libs\FTGL\include">
-			<UniqueIdentifier>{193cbacb-1aee-e0f8-a1b8-adc6019848e6}</UniqueIdentifier>
+			<UniqueIdentifier>{193CBACB-1AEE-E0F8-A1B8-ADC6}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxFTGL\libs\FTGL\include\FTGL">
-			<UniqueIdentifier>{c73df1b7-81e5-1b03-29a4-6b8f3cd35731}</UniqueIdentifier>
+			<UniqueIdentifier>{C73DF1B7-81E5-1B03-29A4-6B8F}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxTextSuite">
-			<UniqueIdentifier>{5fa61cfc-4bc7-6534-ee43-86b63916c246}</UniqueIdentifier>
+			<UniqueIdentifier>{5FA61CFC-4BC7-6534-EE43-86B6}</UniqueIdentifier>
 		</Filter>
 		<Filter Include="addons\ofxTextSuite\src">
-			<UniqueIdentifier>{bb42da10-755c-8653-038f-ed11002f3418}</UniqueIdentifier>
+			<UniqueIdentifier>{BB42DA10-755C-8653-038F-ED11}</UniqueIdentifier>
 		</Filter>
 	</ItemGroup>
 	<ItemGroup>
+		<ClInclude Include="src\testApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
 		<ClInclude Include="src\testApp.h">
 			<Filter>src</Filter>
 		</ClInclude>
@@ -125,5 +134,8 @@
 		<ClInclude Include="..\..\..\addons\ofxTextSuite\src\ofxTextSuite.h">
 			<Filter>addons\ofxTextSuite\src</Filter>
 		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="icon.rc" />
 	</ItemGroup>
 </Project>

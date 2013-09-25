@@ -43,8 +43,9 @@ class lineBlock {
 
 };
 
-//Just a helpful set of enumerated constants.
+//Just two helpful set of enumerated constants.
 enum TextBlockAlignment { OF_TEXT_ALIGN_LEFT, OF_TEXT_ALIGN_RIGHT, OF_TEXT_ALIGN_JUSTIFIED, OF_TEXT_ALIGN_CENTER };
+enum WrapMode {  OF_WRAP_NONE , OF_WRAP_X, OF_WRAP_AREA, OF_WRAP_NUM_LINES };
 
 class ofxTextBlock
 {
@@ -52,20 +53,17 @@ class ofxTextBlock
         ofxTextBlock() { }
         virtual ~ofxTextBlock() { }
 
-        //ADded by Ben McChesney
-        float antiAliasFactor ;
-
         string          rawText;
-        ofxFTGLFont   defaultFont;
+        ofxFTGLFont		defaultFont;
         wordBlock       blankSpaceWord;
         float           scale;
 
         vector<wordBlock>   words;
         vector<lineBlock>   lines;
 
-        void    init(string fontLocation, float fontSize , float antiAlias = 1.0f );
-		void    init(ofxFTGLFont font );
-        void    setText(string _inputText);
+        void    init(string fontLocation, float fontSize );
+		//void    init(ofxFTGLFont font );
+        void    setText(string _inputText , bool bUpdateWrapBox = true );
 
 		void   setProperties( float _x , float _y , TextBlockAlignment alignment ) ;
 
@@ -83,9 +81,6 @@ class ofxTextBlock
         void    drawCenter(float x, float y);
         void    drawJustified(float x, float y, float boxWidth);
 
-        void drawCrispLeft( float x , float y ) ;
-        void drawCrispCenter ( float x , float y ) ;
-
         void    forceScale(float _scale);
 
         float   getWidth();
@@ -93,16 +88,20 @@ class ofxTextBlock
 
 		int		getNumLines() { return lines.size(); }
 
-		float	alpha ;
+		
 
         void unload() ;
 
 		float x , y ; 
+		//float originalX , originalY ; 
+		float	alpha ;
 
-		TextBlockAlignment alignment ; 
-
+		TextBlockAlignment	alignment ; 
+		WrapMode			wrapMode ; 
     protected:
 
+		int		_wrapNumLines , _wrapX , _wrapAreaWidth , _wrapAreaHeight ; 
+		float	_lineHeight ; 
         void    _loadWords();
 
         void    _trimLineSpaces();

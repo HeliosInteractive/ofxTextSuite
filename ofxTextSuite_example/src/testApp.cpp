@@ -5,7 +5,7 @@ void testApp::setup(){
 
 	ofSetLogLevel( OF_LOG_VERBOSE) ; 
 
-    myText.init("frabk.ttf", 34 , true );
+    myText.init("frabk.ttf", 34 );
 	
 
     myText.setText("Welcome. L is for Left, while R is for Right. Center it up with C, or hit J to Justify.  Press 1 to wrap constrained on x, or 2 to fit type to the area.");
@@ -18,6 +18,7 @@ void testApp::setup(){
 
 //--------------------------------------------------------------
 void testApp::update(){
+	 myText.setText(" FRAMENUM : " + ofToString ( ofGetFrameNum() ) + " Welcome. L is for Left, while R is for Right. Center it up with C, or hit J to Justify.  Press 1 to wrap constrained on x, or 2 to fit type to the area.");
 
 }
 
