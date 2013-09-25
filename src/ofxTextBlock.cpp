@@ -86,6 +86,7 @@ void ofxTextBlock::setText(string _inputText , bool bUpdateWrapBox ){
 		switch ( wrapMode ) 
 		{
 			case OF_WRAP_NONE:
+				wrapTextForceLines( 1 ); 
 			break ; 
 
 			case OF_WRAP_X :
