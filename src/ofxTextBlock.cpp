@@ -68,6 +68,7 @@ void ofxTextBlock::init(string fontLocation, float fontSize ){
 	_wrapX = 100 ; 
 	_wrapAreaWidth = 100 ; 
 	_wrapAreaHeight = 100 ; 
+	numLineOffset = 1 ; 
 }
 
 void ofxTextBlock::setProperties( float _x , float _y , TextBlockAlignment _alignment ) 
@@ -168,7 +169,7 @@ void ofxTextBlock::drawLeft(float x, float y){
                 currentWordID = lines[l].wordsID[w];
 
                 drawX = x + currX;
-                drawY = y + (defaultFont.getLineHeight() * (l + 1));
+                drawY = y + (defaultFont.getLineHeight() * (l + numLineOffset ));
 
                // ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[curre ntWordID].color.b);
                 glPushMatrix();
@@ -221,7 +222,7 @@ void ofxTextBlock::drawCenter(float x, float y){
                 currentWordID = lines[l].wordsID[w];
 
                 drawX = -(lineWidth / 2) + currX;
-                drawY = defaultFont.getLineHeight() * (l + 1) ;
+                drawY = defaultFont.getLineHeight() * (l + numLineOffset ) ;
 
                 glPushMatrix();
 
@@ -279,7 +280,7 @@ void ofxTextBlock::drawJustified(float x, float y, float boxWidth){
                 currentWordID = lines[l].wordsID[w];
 
                 drawX = currX;
-                drawY = defaultFont.getLineHeight() * (l + 1);
+                drawY = defaultFont.getLineHeight() * (l + numLineOffset );
 
               //  ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
                 glPushMatrix();
@@ -325,7 +326,7 @@ void ofxTextBlock::drawRight(float x, float y){
                 currentWordID = lines[l].wordsID[w];
 
                 drawX = -currX - words[currentWordID].width;
-                drawY = defaultFont.getLineHeight() * (l + 1);
+                drawY = defaultFont.getLineHeight() * (l + numLineOffset );
 
              //   ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
 
@@ -384,7 +385,7 @@ int ofxTextBlock::_getLinedWords(){
 
 void ofxTextBlock::wrapTextArea(float rWidth, float rHeight){
 
-	
+	wrapMode = OF_WRAP_AREA ; 
 	_wrapAreaWidth = rWidth  ; 
 	_wrapAreaHeight = rHeight ; 
 
@@ -443,6 +444,7 @@ void ofxTextBlock::wrapTextArea(float rWidth, float rHeight){
 
 bool ofxTextBlock::wrapTextForceLines(int linesN){
 
+	wrapMode = OF_WRAP_NUM_LINES ; 
 	_wrapNumLines = linesN ; 
 
     if (words.size() > 0) {
@@ -471,6 +473,7 @@ bool ofxTextBlock::wrapTextForceLines(int linesN){
 
 int ofxTextBlock::wrapTextX(float lineWidth){
 
+	wrapMode = OF_WRAP_X ; 
 	_wrapX = lineWidth ; 
     scale = 1.0f;
 

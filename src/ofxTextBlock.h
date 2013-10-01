@@ -87,11 +87,12 @@ class ofxTextBlock
         float   getHeight();
 
 		int		getNumLines() { return lines.size(); }
-
+		float	getLineHeight() { return _lineHeight ; } ; 
 		
 
         void unload() ;
 
+		int numLineOffset  ; 
 		float x , y ; 
 		//float originalX , originalY ; 
 		float	alpha ;
