@@ -45,19 +45,27 @@ void ofxTextBlock::init(ofxFTGLFont  font )
 }
 */
 
-void ofxTextBlock::init(string fontLocation, float fontSize ){
+void ofxTextBlock::init(string fontLocation, float fontSize, ofColor c , bool useColorMatching ){
+
+
 
     //loadFont(string filename, int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=false, bool makeContours=false, float simplifyAmt=0.3, int dpi=0);
     //defaultFont.loadFont( fontLocation, fontSize ,  true ) ; //, true , true ) ;
-    defaultFont.loadFont( fontLocation , fontSize , true , true ) ;
-    //
+    bool bResult = defaultFont.loadFont( fontLocation , fontSize , true , true ) ;
+    if ( bResult == false ) 
+	{
+		ofLogError( "loading font : " + fontLocation + " @ size : " + ofToString ( "fontSize" ) + " did not go well." ) ; 
+		return ; 
+	}
+	
+	bUseColor = useColorMatching ; 
+	
     //Set up the blank space word
-    blankSpaceWord.rawWord = " "; 
-
-
+    blankSpaceWord.rawWord = " ";
     blankSpaceWord.width   = defaultFont.getStringBoundingBox ((string)"x" , 0 , 0 ).width ;
     blankSpaceWord.height  = defaultFont.getStringBoundingBox ((string)"i" , 0 , 0 ).height ;
-    blankSpaceWord.color.r = blankSpaceWord.color.g = blankSpaceWord.color.b = 255;
+	defaultColor = c ; 
+    blankSpaceWord.color = defaultColor; 
 	alpha = 0.0f ;
     scale = 1.0f ;
 
@@ -77,6 +85,29 @@ void ofxTextBlock::setProperties( float _x , float _y , TextBlockAlignment _alig
 	y = _y ; 
 	alignment = _alignment ; 
 
+}
+
+void ofxTextBlock::highlightWord ( string word , ofColor highlightColor ) 
+{
+	vector< wordBlock >::iterator w ; 
+	for ( w = words.begin() ; w != words.end() ; w++ ) 
+	{
+		if ( (*w).rawWord.compare( word ) == 0 )
+		{
+			ofLogVerbose( "word : " + word + " found ! " ) ; 
+			(*w).color = highlightColor ; 
+		}
+	}
+}
+
+void ofxTextBlock::setParagraphColor ( ofColor pColor ) 
+{
+	defaultColor = pColor ; 
+	vector< wordBlock >::iterator w ; 
+	for ( w = words.begin() ; w != words.end() ; w++ ) 
+	{
+		(*w).color = pColor ; 
+	}
 }
 
 void ofxTextBlock::setText(string _inputText , bool bUpdateWrapBox ){
@@ -110,6 +141,8 @@ void ofxTextBlock::setText(string _inputText , bool bUpdateWrapBox ){
 
 void ofxTextBlock::draw( )
 {
+	//if ( alpha == 0 ) 
+//		return ; 
 		/*
 	//Just a helpful set of enumerated constants.
 enum TextBlockAlignment { OF_TEXT_ALIGN_LEFT, OF_TEXT_ALIGN_RIGHT, OF_TEXT_ALIGN_JUSTIFIED, OF_TEXT_ALIGN_CENTER };
@@ -171,7 +204,8 @@ void ofxTextBlock::drawLeft(float x, float y){
                 drawX = x + currX;
                 drawY = y + (defaultFont.getLineHeight() * (l + numLineOffset ));
 
-               // ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[curre ntWordID].color.b);
+				if ( bUseColor ) 
+				ofSetColor( words[currentWordID].color , alpha * 255.f);
                 glPushMatrix();
                 //glTranslatef(drawX, drawY, 0.0f);
                 glScalef(scale, scale, scale);
@@ -200,10 +234,8 @@ void ofxTextBlock::drawCenter(float x, float y){
     float   lineWidth;
 
     float currX = 0;
-	ofPushMatrix( ) ;\
+	ofPushMatrix( ) ;
 
-		//float scaleAA = 1.0f / antiAliasFactor ;
-        //ofScale( scaleAA , scaleAA ) ;
     if (words.size() > 0) {
 
         for(int l=0;l < lines.size(); l++)
@@ -224,6 +256,8 @@ void ofxTextBlock::drawCenter(float x, float y){
                 drawX = -(lineWidth / 2) + currX;
                 drawY = defaultFont.getLineHeight() * (l + numLineOffset ) ;
 
+				if ( bUseColor ) 
+				ofSetColor( words[currentWordID].color , alpha * 255.f );
                 glPushMatrix();
 
                 //Move to central point using pre-scaled co-ordinates
@@ -282,7 +316,8 @@ void ofxTextBlock::drawJustified(float x, float y, float boxWidth){
                 drawX = currX;
                 drawY = defaultFont.getLineHeight() * (l + numLineOffset );
 
-              //  ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
+				if ( bUseColor ) 
+				ofSetColor( words[currentWordID].color, alpha * 255.f );
                 glPushMatrix();
                 //Move to top left point using pre-scaled co-ordinates
                 glTranslatef(x, y, 0.0f);
@@ -328,8 +363,8 @@ void ofxTextBlock::drawRight(float x, float y){
                 drawX = -currX - words[currentWordID].width;
                 drawY = defaultFont.getLineHeight() * (l + numLineOffset );
 
-             //   ofSetColor(words[currentWordID].color.r, words[currentWordID].color.g, words[currentWordID].color.b);
-
+				if ( bUseColor ) 
+				ofSetColor( words[currentWordID].color , alpha * 255.f);
                 glPushMatrix();
 
                 //Move to top left point using pre-scaled co-ordinates
@@ -536,7 +571,7 @@ void ofxTextBlock::_loadWords(){
         tmpWord.rawWord = tokens.at(i);
         tmpWord.width   = defaultFont.stringWidth(tmpWord.rawWord);
         tmpWord.height  = defaultFont.stringHeight(tmpWord.rawWord);
-        tmpWord.color.r = tmpWord.color.g = tmpWord.color.b = 150;
+		tmpWord.color	= defaultColor ; 
         words.push_back(tmpWord);
         //add spaces into the words vector if it is not the last word.
         if (i != tokens.size()) words.push_back(blankSpaceWord);

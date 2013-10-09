@@ -61,7 +61,10 @@ class ofxTextBlock
         vector<wordBlock>   words;
         vector<lineBlock>   lines;
 
-        void    init(string fontLocation, float fontSize );
+		 
+
+
+        void    init(string fontLocation, float fontSize , ofColor c = ofColor::white, bool bUseColor = false );
 		//void    init(ofxFTGLFont font );
         void    setText(string _inputText , bool bUpdateWrapBox = true );
 
@@ -88,10 +91,14 @@ class ofxTextBlock
 
 		int		getNumLines() { return lines.size(); }
 		float	getLineHeight() { return _lineHeight ; } ; 
-		
+		void	highlightWord ( string word , ofColor highlightColor ) ; 
+		void	setParagraphColor ( ofColor pColor ) ; 
+		bool	bUseColor ; 
 
         void unload() ;
 
+		ofColor defaultColor ;
+		
 		int numLineOffset  ; 
 		float x , y ; 
 		//float originalX , originalY ; 
