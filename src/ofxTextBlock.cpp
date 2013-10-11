@@ -110,7 +110,14 @@ void ofxTextBlock::setParagraphColor ( ofColor pColor )
 	}
 }
 
-void ofxTextBlock::setText(string _inputText , bool bUpdateWrapBox ){
+void ofxTextBlock::setText(string _inputText , bool bUpdateWrapBox )
+{
+	if ( rawText.compare( _inputText ) == 0 ) 
+	{
+		ofLogVerbose( "New text is already the text. Aborting ! " + rawText ) ; 
+		return ; 
+	}
+
     rawText     = _inputText;
     _loadWords();
 	if ( bUpdateWrapBox ) 
@@ -134,8 +141,10 @@ void ofxTextBlock::setText(string _inputText , bool bUpdateWrapBox ){
 			break; 
 		}
 	}
-	
-  //  wrapTextForceLines(1);
+	else
+	{
+		 wrapTextForceLines(1);
+	}
 }
 
 
