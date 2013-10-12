@@ -100,6 +100,22 @@ void ofxTextBlock::highlightWord ( string word , ofColor highlightColor )
 	}
 }
 
+void ofxTextBlock::setColorOfWordsStartingWith ( char c , ofColor highlightColor ) 
+{
+	vector< wordBlock >::iterator w ; 
+	for ( w = words.begin() ; w != words.end() ; w++ ) 
+	{
+		if ( (*w).rawWord.size() > 0 ) 
+		{
+			if ( (*w).rawWord[0] == c ) 
+			{
+				ofLogVerbose((*w).rawWord[0] + " start with " + c ) ; 
+				(*w).color = highlightColor ; 
+			}
+		}
+	}
+}
+
 void ofxTextBlock::setParagraphColor ( ofColor pColor ) 
 {
 	defaultColor = pColor ; 

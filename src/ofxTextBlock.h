@@ -93,6 +93,8 @@ class ofxTextBlock
 		float	getLineHeight() { return _lineHeight ; } ; 
 		void	highlightWord ( string word , ofColor highlightColor ) ; 
 		void	setParagraphColor ( ofColor pColor ) ; 
+		void	setColorOfWordsStartingWith ( char c , ofColor highlightColor ) ;
+
 		bool	bUseColor ; 
 
         void unload() ;
