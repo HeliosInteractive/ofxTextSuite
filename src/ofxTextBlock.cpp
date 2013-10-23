@@ -26,35 +26,40 @@ void ofxTextBlock::unload()
 {
     words.clear() ;
     lines.clear() ;
-
+	font = NULL ; 
 
 }
 
-
-/*
-void ofxTextBlock::init(ofxFTGLFont  font )
+ofxTextBlock::ofxTextBlock() 
 {
-    defaultFont = font ;
-	 antiAliasFactor = 1.0f ; 
-	blankSpaceWord.rawWord = " ";
-	blankSpaceWord.width   = defaultFont.getStringBoundingBox ((string)"x" , 0 , 0 ).width ;
-    blankSpaceWord.height  = defaultFont.getStringBoundingBox ((string)"i" , 0 , 0 ).height ;
-    blankSpaceWord.color.r = blankSpaceWord.color.g = blankSpaceWord.color.b = 255;
-	alpha = 1.0f ;
-    scale = 1.0f ;
+	unload() ; 
+	
 }
-*/
 
-void ofxTextBlock::init(string fontLocation, float fontSize, ofColor c , bool useColorMatching ){
+ofxTextBlock::~ofxTextBlock() 
+{
+
+}
 
 
+void ofxTextBlock::init(string fontLocation, float fontSize , ofColor c , bool useColorMatching )
+{
+	init (  ofxFTGLFontManager::Instance()->getFont( fontLocation , fontSize )  , c , useColorMatching ) ; 
+}
 
+void ofxTextBlock::init(ofxFTGLFont * _font , ofColor c , bool useColorMatching ){
+
+	font = _font ; 
+
+	/*
     //loadFont(string filename, int fontsize, bool _bAntiAliased=true, bool _bFullCharacterSet=false, bool makeContours=false, float simplifyAmt=0.3, int dpi=0);
-    //defaultFont.loadFont( fontLocation, fontSize ,  true ) ; //, true , true ) ;
-    bool bResult = defaultFont.loadFont( fontLocation , fontSize , true , true ) ;
-    if ( bResult == false ) 
+    //font->loadFont( fontLocation, fontSize ,  true ) ; //, true , true ) ;
+    bool bResult = font->loadFont( fontLocation , fontSize , true , true ) ;*/
+    if ( font == NULL ) 
 	{
-		ofLogError( "loading font : " + fontLocation + " @ size : " + ofToString ( "fontSize" ) + " did not go well." ) ; 
+		ofLogError( " passed font reference was NULL ! Aborting . " ) ; 
+
+		//ofLogError( "loading font : " + fontLocation + " @ size : " + ofToString ( "fontSize" ) + " did not go well." ) ; 
 		return ; 
 	}
 	
@@ -62,8 +67,8 @@ void ofxTextBlock::init(string fontLocation, float fontSize, ofColor c , bool us
 	
     //Set up the blank space word
     blankSpaceWord.rawWord = " ";
-    blankSpaceWord.width   = defaultFont.getStringBoundingBox ((string)"x" , 0 , 0 ).width ;
-    blankSpaceWord.height  = defaultFont.getStringBoundingBox ((string)"i" , 0 , 0 ).height ;
+    blankSpaceWord.width   = font->getStringBoundingBox ((string)"x" , 0 , 0 ).width ;
+    blankSpaceWord.height  = font->getStringBoundingBox ((string)"i" , 0 , 0 ).height ;
 	defaultColor = c ; 
     blankSpaceWord.color = defaultColor; 
 	alpha = 0.0f ;
@@ -227,7 +232,7 @@ void ofxTextBlock::drawLeft(float x, float y){
                 currentWordID = lines[l].wordsID[w];
 
                 drawX = x + currX;
-                drawY = y + (defaultFont.getLineHeight() * (l + numLineOffset ));
+                drawY = y + (font->getLineHeight() * (l + numLineOffset ));
 
 				if ( bUseColor ) 
 				ofSetColor( words[currentWordID].color , alpha * 255.f);
@@ -235,7 +240,7 @@ void ofxTextBlock::drawLeft(float x, float y){
                 //glTranslatef(drawX, drawY, 0.0f);
                 glScalef(scale, scale, scale);
 
-                defaultFont.drawString( words[currentWordID].rawWord.c_str(), drawX, drawY);
+                font->drawString( words[currentWordID].rawWord.c_str(), drawX, drawY);
                 currX += words[currentWordID].width;
 
                 glPopMatrix();
@@ -279,7 +284,7 @@ void ofxTextBlock::drawCenter(float x, float y){
                 currentWordID = lines[l].wordsID[w];
 
                 drawX = -(lineWidth / 2) + currX;
-                drawY = defaultFont.getLineHeight() * (l + numLineOffset ) ;
+                drawY = font->getLineHeight() * (l + numLineOffset ) ;
 
 				if ( bUseColor ) 
 				ofSetColor( words[currentWordID].color , alpha * 255.f );
@@ -289,7 +294,7 @@ void ofxTextBlock::drawCenter(float x, float y){
                 glTranslatef(x, y, 0.0f);
 
                 glScalef(scale, scale, scale);
-                defaultFont.drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
+                font->drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
 				ofEnableSmoothing() ;
                 currX += words[currentWordID].width;
 
@@ -339,7 +344,7 @@ void ofxTextBlock::drawJustified(float x, float y, float boxWidth){
                 currentWordID = lines[l].wordsID[w];
 
                 drawX = currX;
-                drawY = defaultFont.getLineHeight() * (l + numLineOffset );
+                drawY = font->getLineHeight() * (l + numLineOffset );
 
 				if ( bUseColor ) 
 				ofSetColor( words[currentWordID].color, alpha * 255.f );
@@ -349,7 +354,7 @@ void ofxTextBlock::drawJustified(float x, float y, float boxWidth){
                 glScalef(scale, scale, scale);
 
                 if (words[currentWordID].rawWord != " ") {
-                    defaultFont.drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
+                    font->drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
                     currX += words[currentWordID].width;
                 }
                 else {
@@ -386,7 +391,7 @@ void ofxTextBlock::drawRight(float x, float y){
                 currentWordID = lines[l].wordsID[w];
 
                 drawX = -currX - words[currentWordID].width;
-                drawY = defaultFont.getLineHeight() * (l + numLineOffset );
+                drawY = font->getLineHeight() * (l + numLineOffset );
 
 				if ( bUseColor ) 
 				ofSetColor( words[currentWordID].color , alpha * 255.f);
@@ -396,7 +401,7 @@ void ofxTextBlock::drawRight(float x, float y){
                 glTranslatef(x, y, 0.0f);
                 glScalef(scale, scale, scale);
 
-                defaultFont.drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
+                font->drawString(words[currentWordID].rawWord.c_str(), drawX, drawY);
                 currX += words[currentWordID].width;
 
                 glPopMatrix();
@@ -594,8 +599,8 @@ void ofxTextBlock::_loadWords(){
     for(int i=0;i < tokens.size(); i++)
     {
         tmpWord.rawWord = tokens.at(i);
-        tmpWord.width   = defaultFont.stringWidth(tmpWord.rawWord);
-        tmpWord.height  = defaultFont.stringHeight(tmpWord.rawWord);
+        tmpWord.width   = font->stringWidth(tmpWord.rawWord);
+        tmpWord.height  = font->stringHeight(tmpWord.rawWord);
 		tmpWord.color	= defaultColor ; 
         words.push_back(tmpWord);
         //add spaces into the words vector if it is not the last word.
@@ -658,7 +663,7 @@ float ofxTextBlock::getWidth(){
 float ofxTextBlock::getHeight(){
 
     if (words.size() > 0) {
-        return defaultFont.getLineHeight() * scale * lines.size();
+        return font->getLineHeight() * scale * lines.size();
     }
     else return 0;
 
@@ -667,7 +672,7 @@ float ofxTextBlock::getHeight(){
 void ofxTextBlock::setLineHeight(float lineHeight){
 
 	_lineHeight = lineHeight ; 
-    defaultFont.setLineHeight(lineHeight);
+    font->setLineHeight(lineHeight);
 
 }
 

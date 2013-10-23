@@ -21,6 +21,7 @@
 #define OFXTEXTBLOCK_OFXTGL_H
 
 #include "ofxFTGLFont.h"
+#include "ofxFTGLFontManager.h"
 #include "ofMain.h"
 #include <iterator>
 
@@ -50,11 +51,11 @@ enum WrapMode {  OF_WRAP_NONE , OF_WRAP_X, OF_WRAP_AREA, OF_WRAP_NUM_LINES };
 class ofxTextBlock
 {
     public:
-        ofxTextBlock() { }
-        virtual ~ofxTextBlock() { }
+        ofxTextBlock() ;
+        ~ofxTextBlock() ;
 
         string          rawText;
-        ofxFTGLFont		defaultFont;
+        ofxFTGLFont	*	font ;
         wordBlock       blankSpaceWord;
         float           scale;
 
@@ -63,7 +64,7 @@ class ofxTextBlock
 
 		 
 
-
+		void	init( ofxFTGLFont * font , ofColor c = ofColor::white, bool bUseColor = false );
         void    init(string fontLocation, float fontSize , ofColor c = ofColor::white, bool bUseColor = false );
 		//void    init(ofxFTGLFont font );
         void    setText(string _inputText , bool bUpdateWrapBox = true );
