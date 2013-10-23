@@ -604,7 +604,7 @@ void ofxTextBlock::_loadWords(){
 		tmpWord.color	= defaultColor ; 
         words.push_back(tmpWord);
         //add spaces into the words vector if it is not the last word.
-        if (i != tokens.size()) words.push_back(blankSpaceWord);
+        if (i != tokens.size() - 1) words.push_back(blankSpaceWord);
     }
 
     /*
